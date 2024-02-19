@@ -1,0 +1,77 @@
+# Student ID  : 2555522
+# Project Name: Taylor Expansion
+# Project ID  : S-Taylor
+# Description : This code defines a function called taylor(x,N) first, compares the actual e^x with taylor expansion form and plots the functions to see the difference.
+# Most importantly, the project shows and plots that if you increase the input N value, the correctness of the expansion result increases.
+
+# Start coding here and then do "File->Save a copy in Drive" to create your own
+import math
+import random
+import matplotlib.pyplot as plt
+
+N=int(input())
+
+
+def taylor(x, N):
+    taylor_result = []
+
+    if type(x) == list:  #I got a error in the second plot because it doesnt work same for lists and float, so i solved it with this line.
+        for val in x:
+            tay_l = 0
+            for n in range(N):
+                tay_l += (val ** n) / math.factorial(n)
+            taylor_result.append(tay_l)
+        return taylor_result
+
+    else:
+        tay_l = 0
+        for n in range(N):
+            tay_l += (x ** n) / math.factorial(n)
+
+        return tay_l
+
+#For smoother line, 100 evenly spaced numbers in (-2,5) created.
+num_points = 100
+x_values = []
+step = (5 + 2) / (num_points - 1)
+current_value = -2
+
+#In the loop "_" was used because, the variable is not used in the loop so its actually not necessary.
+for _ in range(num_points):
+    x_values.append(current_value)
+    current_value += step
+
+
+
+taylor_approximations = taylor(x_values, N)
+
+
+act_e_values = [math.exp(val) for val in x_values]
+
+
+
+
+plt.plot(x_values, taylor_approximations, linestyle='--', label='Taylor', linewidth=2)
+plt.plot(x_values, act_e_values, label='$e^x$', linewidth=2)
+plt.xlabel('x values', fontsize=14)
+plt.ylabel('$f(x)$', fontsize=20)
+plt.legend(fontsize=12, loc='upper left')
+plt.title('Taylor Approximation vs Actual Exponential Function', fontsize=16)
+plt.show()
+
+N_error=[i for i in range(17)]
+
+error_values=[]
+x_ours=3.312
+
+for n in N_error:
+  a=taylor(x_ours,n)
+  error_1=abs(((a-math.exp(x_ours))/math.exp(x_ours))*100)
+  error_values.append(error_1)
+
+
+
+plt.plot(N_error, error_values, linewidth=2)
+plt.ylabel("%Error", fontsize=14)
+plt.xlabel("N", fontsize=14)
+plt.show

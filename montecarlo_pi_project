@@ -1,0 +1,74 @@
+# Student ID  : 2555522
+# Project Name: Pi Monte Carlo
+# Project ID  : S-PiMonteCarlo
+# Description : This code utilizes the Monte Carlo method to approximate the value of π by randomly scattering dots within a square and analyzing the ratio of dots falling inside a specific quadrant. It visualizes the process and displays how the accuracy of the estimation improves as the number of scattered dots increases.
+
+# Start coding here and then do "File->Save a copy in Drive" to create your own
+
+import matplotlib.pyplot as plt
+import random
+import math
+
+
+def montecarlopi(N):
+    A = []
+    for i in range(N):
+        a = random.random()
+        A.append(a)
+    B = []
+    for i in range(N):
+        b = random.random()
+        B.append(b)
+
+    inner_circle_x = []
+    inner_circle_y = []
+    outer_circle_x = []
+    outer_circle_y = []
+    for i in range(len(A)):
+        if (A[i] ** 2) + (B[i] ** 2) <= 1:
+            inner_circle_x.append(A[i])
+            inner_circle_y.append(B[i])
+        else:
+            outer_circle_x.append(A[i])
+            outer_circle_y.append(B[i])
+    i_quadrant = len(inner_circle_x)
+    pi_carlo = (4 * i_quadrant) / N
+    error_pi = abs(((pi_carlo - math.pi) / math.pi) * 100)
+    return error_pi, inner_circle_x, inner_circle_y, outer_circle_x, outer_circle_y
+
+
+N = int(input())
+error, ok_dots_x, ok_dots_y, not_ok_dots_x, not_ok_dots_y = montecarlopi(N)
+
+radius = 1.0
+num_points = 100
+
+x_values = [radius * i / num_points for i in range(num_points + 1)]
+y_values = [((radius ** 2) - (x ** 2)) ** 0.5 for x in x_values]
+
+plt.figure(figsize=(9, 7))
+plt.scatter(ok_dots_x, ok_dots_y, s=1, marker=".")
+plt.scatter(not_ok_dots_x, not_ok_dots_y, color="red", s=1, marker="v")
+plt.plot(x_values,y_values, color="black")
+plt.show()
+
+N_values = []
+error_values = []
+
+#For the N values:
+max_N = 2000
+
+for N in range(1, max_N + 1):
+    error = montecarlopi(N)[0]  # I wanted to use only the first returned tuple on my function, so it is "error_pi".
+    N_values.append(N)
+    error_values.append(error)
+
+# Plotting the error graph:
+plt.figure(figsize=(9, 7))
+plt.plot(N_values, error_values,linewidth=0.8)
+plt.xlabel('Number of Dots (N)')
+plt.ylabel('Error (%)')
+plt.title('Error vs. Number of Dots (N)')
+plt.grid(True)
+plt.savefig('plot.png', dpi=100)
+plt.show()

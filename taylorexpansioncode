@@ -74,4 +74,4 @@ for n in N_error:
 plt.plot(N_error, error_values, linewidth=2)
 plt.ylabel("%Error", fontsize=14)
 plt.xlabel("N", fontsize=14)
-plt.show
+plt.show()
